@@ -160,3 +160,53 @@ total time: 82124.8 microseconds
 total time: 100950 microseconds
 total time: 94875.1 microseconds
 total time: 102548 microseconds
+
+OPENMP, N = 1500, any num of threads
+ncores: 1, total time: 1.67546e+07 microseconds
+ncores: 2, total time: 8.6912e+06 microseconds
+ncores: 3, total time: 5.7183e+06 microseconds
+ncores: 4, total time: 4.37894e+06 microseconds
+ncores: 5, total time: 4.24054e+06 microseconds
+ncores: 6, total time: 3.28507e+06 microseconds
+ncores: 7, total time: 2.57517e+06 microseconds
+ncores: 8, total time: 2.75278e+06 microseconds
+ncores: 9, total time: 2.36162e+06 microseconds
+ncores: 10, total time: 1.87225e+06 microseconds
+ncores: 11, total time: 1.75742e+06 microseconds
+ncores: 12, total time: 1.89388e+06 microseconds
+ncores: 13, total time: 1.60953e+06 microseconds
+ncores: 14, total time: 1.4978e+06 microseconds
+ncores: 15, total time: 1.39395e+06 microseconds
+ncores: 16, total time: 1.2765e+06 microseconds
+ncores: 17, total time: 1.13449e+06 microseconds
+ncores: 18, total time: 1.33826e+06 microseconds
+ncores: 19, total time: 1.10045e+06 microseconds
+ncores: 20, total time: 964620 microseconds
+ncores: 21, total time: 984908 microseconds
+ncores: 22, total time: 902671 microseconds
+ncores: 23, total time: 850545 microseconds
+ncores: 24, total time: 817993 microseconds
+ncores: 25, total time: 860810 microseconds
+ncores: 26, total time: 857008 microseconds
+ncores: 27, total time: 753869 microseconds
+ncores: 28, total time: 703320 microseconds
+ncores: 29, total time: 706679 microseconds
+ncores: 30, total time: 713688 microseconds
+ncores: 31, total time: 742161 microseconds
+ncores: 32, total time: 735703 microseconds
+ncores: 33, total time: 657022 microseconds
+ncores: 34, total time: 638298 microseconds
+ncores: 35, total time: 626176 microseconds
+ncores: 36, total time: 600656 microseconds
+ncores: 37, total time: 612665 microseconds
+ncores: 38, total time: 558394 microseconds
+ncores: 39, total time: 540788 microseconds
+ncores: 40, total time: 540378 microseconds
+ncores: 41, total time: 499509 microseconds
+ncores: 42, total time: 548301 microseconds
+ncores: 43, total time: 536734 microseconds
+ncores: 44, total time: 569927 microseconds
+ncores: 45, total time: 460183 microseconds
+ncores: 46, total time: 472067 microseconds
+ncores: 47, total time: 466681 microseconds
+ncores: 48, total time: 444756 microseconds

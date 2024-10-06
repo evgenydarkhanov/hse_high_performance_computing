@@ -1,5 +1,5 @@
 run_serial: build_serial
-	echo "----- Running 5 times -----"
+	echo "----- Running serial -----"
 	./loop_serial.sh
 
 build_serial:
@@ -15,7 +15,7 @@ build_omp:
 	g++ -fopenmp gemm_omp.cpp -o gemm_omp.out
 
 run_blas: build_blas
-	echo "----- Running 5 times -----"
+	echo "----- Running BLAS -----"
 	./loop_blas.sh
 
 build_blas:
@@ -29,6 +29,14 @@ run_mkl: build_mkl
 build_mkl:
 	echo "----- Building MKL -----"
 	g++ gemm_mkl.cpp -fopenmp -lmkl_gf_lp64 -lmkl_core -lmkl_gnu_thread -o gemm_mkl.out
+
+run_any: build_any
+	echo "----- Running any -----"
+	./loop_any.sh
+
+build_any:
+	echo "----- Building any -----"
+	g++ -fopenmp gemm_any.cpp -o gemm_any.out
 
 clean:
 	echo "----- Cleaning -----"
