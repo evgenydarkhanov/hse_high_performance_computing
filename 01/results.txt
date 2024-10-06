@@ -1,0 +1,162 @@
+SERIAL MATRIX MULTIPLICATION
+N = 500
+total time: 720000 microseconds
+total time: 710000 microseconds
+total time: 720000 microseconds
+total time: 700000 microseconds
+total time: 730000 microseconds
+
+N = 1000
+total time: 4.7e+06 microseconds
+total time: 4.72e+06 microseconds
+total time: 4.88e+06 microseconds
+total time: 4.72e+06 microseconds
+total time: 4.69e+06 microseconds
+
+N = 1500
+total time: 3.071e+07 microseconds
+total time: 2.846e+07 microseconds
+total time: 3.174e+07 microseconds
+total time: 2.794e+07 microseconds
+total time: 3.03e+07 microseconds
+
+OPENMP MATRIX MULTIPLICATION
+N = 500
+ncores: 1
+total time: 737008 microseconds
+total time: 721728 microseconds
+total time: 738128 microseconds
+total time: 704864 microseconds
+total time: 738528 microseconds
+ncores: 2
+total time: 397255 microseconds
+total time: 465337 microseconds
+total time: 394580 microseconds
+total time: 412145 microseconds
+total time: 395818 microseconds
+ncores: 4
+total time: 254468 microseconds
+total time: 254894 microseconds
+total time: 254242 microseconds
+total time: 255446 microseconds
+total time: 254036 microseconds
+ncores: 8
+total time: 212546 microseconds
+total time: 158254 microseconds
+total time: 225025 microseconds
+total time: 156012 microseconds
+total time: 195017 microseconds
+ncores: 16
+total time: 130468 microseconds
+total time: 130383 microseconds
+total time: 130879 microseconds
+total time: 138431 microseconds
+total time: 132210 microseconds
+
+N = 1000
+ncores: 1
+total time: 5.85471e+06 microseconds
+total time: 4.83582e+06 microseconds
+total time: 5.10912e+06 microseconds
+total time: 4.96882e+06 microseconds
+total time: 5.48078e+06 microseconds
+ncores: 2
+total time: 2.52109e+06 microseconds
+total time: 3.00842e+06 microseconds
+total time: 2.56117e+06 microseconds
+total time: 2.74777e+06 microseconds
+total time: 2.46266e+06 microseconds
+ncores: 4
+total time: 1.38189e+06 microseconds
+total time: 1.33318e+06 microseconds
+total time: 1.43371e+06 microseconds
+total time: 1.263e+06 microseconds
+total time: 1.36954e+06 microseconds
+ncores: 8
+total time: 810591 microseconds
+total time: 707963 microseconds
+total time: 1.02887e+06 microseconds
+total time: 708405 microseconds
+total time: 670421 microseconds
+ncores: 16
+total time: 473456 microseconds
+total time: 618191 microseconds
+total time: 664222 microseconds
+total time: 610024 microseconds
+total time: 799093 microseconds
+
+N = 1500
+ncores: 1
+total time: 3.01617e+07 microseconds
+total time: 2.72111e+07 microseconds
+total time: 2.99673e+07 microseconds
+total time: 2.78808e+07 microseconds
+total time: 2.98331e+07 microseconds
+ncores: 2
+total time: 1.47164e+07 microseconds
+total time: 1.53743e+07 microseconds
+total time: 1.59367e+07 microseconds
+total time: 1.59636e+07 microseconds
+total time: 1.60867e+07 microseconds
+ncores: 4
+total time: 7.97075e+06 microseconds
+total time: 8.06915e+06 microseconds
+total time: 8.07737e+06 microseconds
+total time: 8.08982e+06 microseconds
+total time: 7.93921e+06 microseconds
+ncores: 8
+total time: 4.09993e+06 microseconds
+total time: 4.02798e+06 microseconds
+total time: 3.36092e+06 microseconds
+total time: 4.06991e+06 microseconds
+total time: 3.3139e+06 microseconds
+ncores: 16
+total time: 1.71427e+06 microseconds
+total time: 1.99727e+06 microseconds
+total time: 2.69265e+06 microseconds
+total time: 1.99815e+06 microseconds
+total time: 2.65385e+06 microseconds
+
+OPENBLAS MATRIX MULTIPLICATION
+N = 500
+total time: 6919.77 microseconds
+total time: 7763.08 microseconds
+total time: 7379.99 microseconds
+total time: 6830.11 microseconds
+total time: 7313.61 microseconds
+
+N = 1000
+total time: 36322.1 microseconds
+total time: 36376.1 microseconds
+total time: 30381.4 microseconds
+total time: 37539.8 microseconds
+total time: 33502.6 microseconds
+
+N = 1500
+total time: 89310.8 microseconds
+total time: 89288.6 microseconds
+total time: 90451.7 microseconds
+total time: 89477.4 microseconds
+total time: 88208.1 microseconds
+
+MKL MATRIX MULTIPLICATION
+N = 500
+total time: 12045.5 microseconds
+total time: 12999.8 microseconds
+total time: 12561.4 microseconds
+total time: 12845.2 microseconds
+total time: 12361.9 microseconds
+
+N = 1000
+total time: 37863.2 microseconds
+total time: 41248.7 microseconds
+total time: 39387.4 microseconds
+total time: 36636.5 microseconds
+total time: 39693.4 microseconds
+
+N = 1500
+total time: 101708 microseconds
+total time: 82124.8 microseconds
+total time: 100950 microseconds
+total time: 94875.1 microseconds
+total time: 102548 microseconds
