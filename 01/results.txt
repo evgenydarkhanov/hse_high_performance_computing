@@ -161,7 +161,8 @@ total time: 100950 microseconds
 total time: 94875.1 microseconds
 total time: 102548 microseconds
 
-OPENMP, N = 1500, any num of threads
+OPENMP, ANY cpus-per-task
+1500
 ncores: 1, total time: 1.67546e+07 microseconds
 ncores: 2, total time: 8.6912e+06 microseconds
 ncores: 3, total time: 5.7183e+06 microseconds
@@ -210,3 +211,105 @@ ncores: 45, total time: 460183 microseconds
 ncores: 46, total time: 472067 microseconds
 ncores: 47, total time: 466681 microseconds
 ncores: 48, total time: 444756 microseconds
+
+OPENMP, ANY
+1500
+ncores: 1, total time: 3.2449e+07 microseconds
+ncores: 2, total time: 3.07348e+07 microseconds
+ncores: 3, total time: 2.89179e+07 microseconds
+ncores: 4, total time: 2.65883e+07 microseconds
+ncores: 5, total time: 2.41481e+07 microseconds
+ncores: 6, total time: 2.37998e+07 microseconds
+ncores: 7, total time: 2.21796e+07 microseconds
+ncores: 8, total time: 2.91179e+07 microseconds
+ncores: 9, total time: 3.05494e+07 microseconds
+ncores: 10, total time: 3.13278e+07 microseconds
+ncores: 11, total time: 3.16347e+07 microseconds
+ncores: 12, total time: 3.13316e+07 microseconds
+ncores: 13, total time: 3.12157e+07 microseconds
+ncores: 14, total time: 2.77328e+07 microseconds
+ncores: 15, total time: 2.79978e+07 microseconds
+ncores: 16, total time: 2.94995e+07 microseconds
+ncores: 17, total time: 2.92352e+07 microseconds
+ncores: 18, total time: 3.00793e+07 microseconds
+ncores: 19, total time: 2.98634e+07 microseconds
+ncores: 20, total time: 3.02251e+07 microseconds
+ncores: 21, total time: 2.8998e+07 microseconds
+ncores: 22, total time: 2.98359e+07 microseconds
+ncores: 23, total time: 2.3803e+07 microseconds
+ncores: 24, total time: 2.14549e+07 microseconds
+ncores: 25, total time: 2.01375e+07 microseconds
+ncores: 26, total time: 2.11355e+07 microseconds
+ncores: 27, total time: 1.94183e+07 microseconds
+ncores: 28, total time: 2.11609e+07 microseconds
+ncores: 29, total time: 2.12933e+07 microseconds
+ncores: 30, total time: 2.12111e+07 microseconds
+ncores: 31, total time: 2.17678e+07 microseconds
+ncores: 32, total time: 3.12047e+07 microseconds
+ncores: 33, total time: 2.70979e+07 microseconds
+ncores: 34, total time: 2.9257e+07 microseconds
+ncores: 35, total time: 3.01275e+07 microseconds
+ncores: 36, total time: 3.08547e+07 microseconds
+ncores: 37, total time: 3.08932e+07 microseconds
+ncores: 38, total time: 3.06545e+07 microseconds
+ncores: 39, total time: 2.92374e+07 microseconds
+ncores: 40, total time: 2.83867e+07 microseconds
+ncores: 41, total time: 2.85787e+07 microseconds
+ncores: 42, total time: 3.00453e+07 microseconds
+ncores: 43, total time: 2.95371e+07 microseconds
+ncores: 44, total time: 2.95356e+07 microseconds
+ncores: 45, total time: 2.94355e+07 microseconds
+ncores: 46, total time: 2.91353e+07 microseconds
+ncores: 47, total time: 2.88077e+07 microseconds
+ncores: 48, total time: 2.91646e+07 microseconds
+
+OPENMP, ANY
+1000
+ncores: 1, total time: 1.03029e+07 microseconds
+ncores: 2, total time: 4.76448e+06 microseconds
+ncores: 3, total time: 2.90683e+06 microseconds
+ncores: 4, total time: 2.24867e+06 microseconds
+ncores: 5, total time: 1.80122e+06 microseconds
+ncores: 6, total time: 1.4337e+06 microseconds
+ncores: 7, total time: 1.3472e+06 microseconds
+ncores: 8, total time: 1.26813e+06 microseconds
+ncores: 9, total time: 1.02198e+06 microseconds
+ncores: 10, total time: 924463 microseconds
+ncores: 11, total time: 1.0425e+06 microseconds
+ncores: 12, total time: 959304 microseconds
+ncores: 13, total time: 911545 microseconds
+ncores: 14, total time: 928576 microseconds
+ncores: 15, total time: 827063 microseconds
+ncores: 16, total time: 791360 microseconds
+ncores: 17, total time: 811926 microseconds
+ncores: 18, total time: 743675 microseconds
+ncores: 19, total time: 668742 microseconds
+ncores: 20, total time: 675750 microseconds
+ncores: 21, total time: 623282 microseconds
+ncores: 22, total time: 605911 microseconds
+ncores: 23, total time: 610486 microseconds
+ncores: 24, total time: 688610 microseconds
+ncores: 25, total time: 913950 microseconds
+ncores: 26, total time: 635379 microseconds
+ncores: 27, total time: 596690 microseconds
+ncores: 28, total time: 544689 microseconds
+ncores: 29, total time: 534555 microseconds
+ncores: 30, total time: 515197 microseconds
+ncores: 31, total time: 519920 microseconds
+ncores: 32, total time: 483482 microseconds
+ncores: 33, total time: 473841 microseconds
+ncores: 34, total time: 476674 microseconds
+ncores: 35, total time: 449554 microseconds
+ncores: 36, total time: 437976 microseconds
+ncores: 37, total time: 422428 microseconds
+ncores: 38, total time: 452437 microseconds
+ncores: 39, total time: 445069 microseconds
+ncores: 40, total time: 441657 microseconds
+ncores: 41, total time: 434067 microseconds
+ncores: 42, total time: 433232 microseconds
+ncores: 43, total time: 471515 microseconds
+ncores: 44, total time: 468292 microseconds
+ncores: 45, total time: 481893 microseconds
+ncores: 46, total time: 502466 microseconds
+ncores: 47, total time: 448445 microseconds
+ncores: 48, total time: 470670 microseconds
