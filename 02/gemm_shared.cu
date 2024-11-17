@@ -4,7 +4,9 @@
 #include <cuda_runtime.h>
 
 const int N = 1024;
-
+const int BLOCK_SIZE = 32;
+const int GRID_SIZE = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
+    
 void fill_matrix(double *matrix, int rows, int cols)
 {
     for (int i = 0; i < cols * rows; i++)
@@ -29,21 +31,55 @@ void matmul_cpu(int rowsA, int colsA, int colsB, double *A, double *B, double *C
     }
 }
 
-__global__ void matmul_gpu(double *A, double *B, double *C, int colsA, int colsB)
+__global__ void matmul_gpu(double *A, double *B, double *C, int size) 
 {
-    int idx_a = blockDim.y * blockIdx.y + threadIdx.y;  // row from A
-    int idx_b = blockDim.x * blockIdx.x + threadIdx.x;  // col from B
-    int idx_c = colsA * idx_a + idx_b;                  // elem from C
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
     
-    if (idx_a < N && idx_b < N)
+    // Разделяемая память для подматриц
+    __shared__ double shared_A[BLOCK_SIZE][BLOCK_SIZE];
+    __shared__ double shared_B[BLOCK_SIZE][BLOCK_SIZE];
+    
+    double sum = 0.0;
+
+    // Перемножение блоков
+    for (int k = 0; k < (size + BLOCK_SIZE - 1) / BLOCK_SIZE; k++) 
     {
-        double sum = 0;
-        for (int k = 0; k < colsA; k++)
+        // Загрузка данных в разделяемую память
+        if (row < size && (k * BLOCK_SIZE + threadIdx.x) < size) 
         {
-            sum += A[idx_a * colsA + k] * B[idx_b + k * colsB];
+            shared_A[threadIdx.y][threadIdx.x] = A[row * size + (k * BLOCK_SIZE + threadIdx.x)];
         }
-        C[idx_c] = sum;
-    }
+        else
+        {
+            shared_A[threadIdx.y][threadIdx.x] = 0.0;
+        }
+
+        if (col < size && (k * BLOCK_SIZE + threadIdx.y) < size)
+        {
+            shared_B[threadIdx.y][threadIdx.x] = B[(k * BLOCK_SIZE + threadIdx.y) * size + col];
+        }
+        else
+        {
+            shared_B[threadIdx.y][threadIdx.x] = 0.0;
+        }
+
+        __syncthreads(); // Синхронизация потоков
+        
+        // Умножение блоков
+        for (int n = 0; n < BLOCK_SIZE; n++)
+        {
+            sum += shared_A[threadIdx.y][n] * shared_B[n][threadIdx.x];
+        }
+
+        __syncthreads(); // Синхронизация потоков
+     }
+
+     // Запись результата в глобальную память
+     if (row < size && col < size)
+     {
+        C[row * size + col] = sum;
+     }
 }
 
 int main()
@@ -53,10 +89,9 @@ int main()
     size_t matrix_size = cols * rows * sizeof(double);
 
     // creating host matrices
-    double *h_A, *h_B, *h_C;
-    cudaHostAlloc( (void**)&h_A, matrix_size, cudaHostAllocDefault );
-    cudaHostAlloc( (void**)&h_B, matrix_size, cudaHostAllocDefault );
-    cudaHostAlloc( (void**)&h_C, matrix_size, cudaHostAllocDefault );
+    double *h_A = (double*)malloc(matrix_size);
+    double *h_B = (double*)malloc(matrix_size);
+    double *h_C = (double*)malloc(matrix_size);
 
     // filling matrices with random numbers
     fill_matrix(h_A, rows, cols); 
@@ -69,8 +104,6 @@ int main()
     cudaMalloc( (void**)&d_C, matrix_size );
     
     // block and grid sizes
-    int BLOCK_SIZE = 32;
-    int GRID_SIZE = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
     dim3 threadsPerBlock = dim3(BLOCK_SIZE, BLOCK_SIZE, 1);
     dim3 blocksPerGrid = dim3(GRID_SIZE, GRID_SIZE, 1);
 
@@ -87,19 +120,19 @@ int main()
     // cudaMemcpy( d_C, h_C, matrix_size, cudaMemcpyHostToDevice );
 
     // kernel
-    matmul_gpu<<< blocksPerGrid, threadsPerBlock >>>(d_A, d_B, d_C, cols, cols);
-    
+    matmul_gpu<<< blocksPerGrid, threadsPerBlock >>>(d_A, d_B, d_C, cols);
+
     cudaMemcpy( h_C, d_C, matrix_size, cudaMemcpyDeviceToHost );
     cudaEventRecord(stop_gpu, 0);
-    
+
     cudaEventSynchronize(stop_gpu);
     cudaEventElapsedTime(&gpu_time, start_gpu, stop_gpu);
 
-    printf("GPU time (pinned memory, copyHTD, kernel, copyDTH): %.3f ms\n", gpu_time);
-    
+    printf("GPU time (shared memory, copyHTD, kernel, copyDTH): %.3f ms\n", gpu_time);
+
     cudaEventDestroy(start_gpu);
     cudaEventDestroy(stop_gpu);
-    
+
     cudaFree(d_A);
     cudaFree(d_B);
     cudaFree(d_C);
@@ -124,7 +157,7 @@ int main()
     
     cudaEventDestroy(start_cpu);
     cudaEventDestroy(stop_cpu);
-    
+
     printf("checking\n");
     double delta = 0;
     for (int i = 0; i < cols * rows; i++)
@@ -141,9 +174,9 @@ int main()
     }
     free(h_D);
     */
-    cudaFreeHost(h_A);
-    cudaFreeHost(h_B);
-    cudaFreeHost(h_C);
+    free(h_A);
+    free(h_B);
+    free(h_C);
 
     return 0;
 }

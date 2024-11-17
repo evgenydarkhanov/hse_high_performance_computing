@@ -29,18 +29,18 @@ void matmul_cpu(int rowsA, int colsA, int colsB, double *A, double *B, double *C
     }
 }
 
-__global__ void matmul_gpu(double *A, double *B, double *C, int colsA, int colsB)
+__global__ void matmul_gpu(double *A, double *B, double *C, int size)
 {
     int idx_a = blockDim.y * blockIdx.y + threadIdx.y;  // row from A
     int idx_b = blockDim.x * blockIdx.x + threadIdx.x;  // col from B
-    int idx_c = colsA * idx_a + idx_b;                  // elem from C
+    int idx_c = idx_a * size + idx_b;                  // elem from C
     
-    if (idx_a < N && idx_b < N)
+    if (idx_a < size && idx_b < size)
     {
         double sum = 0;
-        for (int k = 0; k < colsA; k++)
+        for (int k = 0; k < size; k++)
         {
-            sum += A[idx_a * colsA + k] * B[idx_b + k * colsB];
+            sum += A[idx_a * size + k] * B[k * size + idx_b];
         }
         C[idx_c] = sum;
     }
@@ -61,22 +61,19 @@ int main()
     fill_matrix(h_A, rows, cols); 
     fill_matrix(h_B, rows, cols);
 
-    // creating device matrices
-    double *d_A, *d_B, *d_C;
-    cudaMalloc( (void**)&d_A, matrix_size );
-    cudaMalloc( (void**)&d_B, matrix_size );
-    cudaMalloc( (void**)&d_C, matrix_size );
-    
-    // creating streams
-    cudaStream_t stream0, stream1;
-    cudaStreamCreate(&stream0);
-    cudaStreamCreate(&stream1);
-
     // block and grid sizes
     int BLOCK_SIZE = 32;
     int GRID_SIZE = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    dim3 threadsPerBlock = dim3(BLOCK_SIZE, BLOCK_SIZE, 1);
+    dim3 threadsPerBlock(BLOCK_SIZE, BLOCK_SIZE, 1);
     dim3 blocksPerGrid = dim3(GRID_SIZE, GRID_SIZE, 1);
+
+    // creating streams
+    int num_streams = 8;
+    cudaStream_t streams[num_streams];
+    for (int i = 0; i < num_streams; i++)
+    {
+        cudaStreamCreate(&streams[i]);
+    }
 
     // timing
     cudaEvent_t start_gpu, stop_gpu;
@@ -84,37 +81,62 @@ int main()
     cudaEventCreate(&start_gpu);
     cudaEventCreate(&stop_gpu);
 
-    // copying the data
     cudaEventRecord(start_gpu, 0);
 
-    cudaMemcpyAsync( d_A, h_A, matrix_size, cudaMemcpyHostToDevice, stream0 );
-    cudaMemcpyAsync( d_B, h_B, matrix_size, cudaMemcpyHostToDevice, stream0 );
+    // creating device matrices
+    double *d_A[num_streams], *d_B[num_streams], *d_C[num_streams];
+    for (int i = 0; i < num_streams; i++)
+    {
+        //cudaMalloc( (void**)&d_A[i], BLOCK_SIZE * N * sizeof(double) );
+        //cudaMalloc( (void**)&d_B[i], BLOCK_SIZE * N * sizeof(double) );
+        //cudaMalloc( (void**)&d_C[i], BLOCK_SIZE * N * sizeof(double) );
+        
+        cudaMalloc( (void**)&d_A[i], matrix_size );
+        cudaMalloc( (void**)&d_B[i], matrix_size );
+        cudaMalloc( (void**)&d_C[i], matrix_size );
 
+        cudaMemcpyAsync( d_A[i], h_A, matrix_size, cudaMemcpyHostToDevice, streams[i] );
+        cudaMemcpyAsync( d_B[i], h_B, matrix_size, cudaMemcpyHostToDevice, streams[i] );
+        //cudaMemcpyAsync( d_A[i], h_A + i * BLOCK_SIZE * N, BLOCK_SIZE * N * sizeof(double), cudaMemcpyHostToDevice, streams[i] );
+        //cudaMemcpyAsync( d_B[i], h_B + i * BLOCK_SIZE * N, BLOCK_SIZE * N * sizeof(double), cudaMemcpyHostToDevice, streams[i] );
+    }
+    
     // kernel
-    matmul_gpu<<< blocksPerGrid, threadsPerBlock, 0, stream1 >>>(d_A, d_B, d_C, cols, cols);
+    for (int i = 0; i < num_streams; i++)
+    {
+        matmul_gpu<<< blocksPerGrid, threadsPerBlock, 0, streams[i] >>>(d_A[i], d_B[i], d_C[i], BLOCK_SIZE);
+        // matmul_gpu<<< blocksPerGrid, threadsPerBlock, 0, streams[i] >>>(d_A + i * BLOCK_SIZE * N, d_B + i * BLOCK_SIZE * N, d_C + i * BLOCK_SIZE * N, BLOCK_SIZE);
+    }
 
-    cudaMemcpyAsync( h_C, d_C, matrix_size, cudaMemcpyDeviceToHost, stream0 );
+    for (int i = 0; i < num_streams; i++)
+    {
+        cudaMemcpyAsync( h_C + i * (matrix_size/num_streams), d_C[i], matrix_size/num_streams, cudaMemcpyDeviceToHost, streams[i] );
+        //cudaMemcpyAsync( h_C + i * BLOCK_SIZE * N, d_C[i], BLOCK_SIZE * N * sizeof(double), cudaMemcpyDeviceToHost, streams[i] );
+    }
 
-    cudaStreamSynchronize(stream0);
-    cudaStreamSynchronize(stream1);
+    for (int i = 0; i < num_streams; i++)
+    {
+        cudaStreamSynchronize(streams[i]);
+    }
 
     cudaEventRecord(stop_gpu, 0);
 
     cudaEventSynchronize(stop_gpu);
     cudaEventElapsedTime(&gpu_time, start_gpu, stop_gpu);
 
-    printf("GPU time (global memory, copyHTD, kernel, copyDTH): %.3f ms\n", gpu_time);
+    printf("GPU time (streams, copyHTD, kernel, copyDTH): %.3f ms\n", gpu_time);
 
     cudaEventDestroy(start_gpu);
     cudaEventDestroy(stop_gpu);
-    cudaStreamDestroy(stream0);
-    cudaStreamDestroy(stream1);
+    
+    for (int i = 0; i < num_streams; i++)
+    {
+        cudaStreamDestroy(streams[i]);
+        cudaFree(d_A[i]);
+        cudaFree(d_B[i]);
+        cudaFree(d_C[i]);
+    }
 
-    cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
-
-    /*
     // checking with CPU multiplication
     double *h_D = (double*)malloc(matrix_size);
     
@@ -136,10 +158,14 @@ int main()
     cudaEventDestroy(stop_cpu);
 
     printf("checking\n");
+
     double delta = 0;
-    for (int i = 0; i < cols * rows; i++)
+    for (int i = 0; i < rows; i++)
     {
-        delta += fabs(h_D[i] - h_C[i]);
+        for (int j = 0; j < cols; j++)
+        {
+            delta += fabs(h_D[i * cols + j] - h_C[i * cols + j]);
+        }
     }
     if (delta > 0.00001)
     {
@@ -150,7 +176,7 @@ int main()
         printf("good %f\n", delta);
     }
     free(h_D);
-    */
+    
     free(h_A);
     free(h_B);
     free(h_C);
