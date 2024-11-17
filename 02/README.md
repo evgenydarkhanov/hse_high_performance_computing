@@ -7,7 +7,8 @@
 - `gemm_global_kernel_only.cu`
 - `gemm_omp.c`
 - `gemm_pinned.cu`
-- `gemm shared.cu`
+- `gemm_shared.cu`
+- `gemm_streams.cu`
 - `gemm_unified.cu`
 - `Makefile` - для запуска соответствующего `.cu/.c`-файла
 
@@ -30,6 +31,10 @@ module load nvidia_sdk/nvhpc/23.5
 ### Unified Memory
 
 - `make unified`
+
+### Streams
+
+- `make streams`
 
 ### Shared Memory
 
