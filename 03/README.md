@@ -9,6 +9,7 @@
 - `test.txt` - записаны выводы в консоль файлов `heat_serial.cpp`, `heat_parallel.cpp`
 - `temperatures.txt` - записаны изменения температур после каждой итерации
 - `Makefile` - для запуска соответствующего `.cpp`-файла
+- `results.ipynb`
 
 Перед запуском требуется загрузить openmpi3
 
